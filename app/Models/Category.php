@@ -13,4 +13,9 @@ class Category extends Model
         'category_id',
     ];
     public $table = "category";
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class, 'category_id', 'id');
+    }
 }

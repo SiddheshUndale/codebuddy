@@ -26,8 +26,8 @@
                                         placeholder="Enter Category Name" required>
                                 </div>
                                 <div class="col-6">
-                                    <label class="control-label my-2">Project Type</label>
-                                    <select class="form-control" name="category_id" title="Select Project Type">
+                                    <label class="control-label my-2">Parent Category</label>
+                                    <select class="form-control" name="category_id" title="Select Parent Category">
                                         <option value="" selected>
                                             None</option>
                                         @foreach ($categories as $cat)
@@ -48,7 +48,25 @@
                                 </div>
                             </div>
                         </form>
-                        <h3>Category List</h3>
+                        <h3>Nested Categories in a Tree view</h3>
+                        @foreach ($categories as $item)
+                            <li class="treeview" style="list-style-type: none">
+                                <i class="fa fa-link"></i> <span>{{ $item->name }}</span>
+                                <a href="getDetails/{{ $item->id }}"><i class="fa fa-edit pull-right text-dark"></i></a>
+                                <a href="delete/{{ $item->id }}"><i class="fa fa-close pull-right text-danger"></i></a>
+                                <ul class="treeview-menu" style="list-style-type: none">
+                                    @foreach ($item['categories'] as $child)
+                                        <li>{{ $child->name }}
+                                            <a href="getDetails/{{ $child->id }}"><i
+                                                    class="fa fa-edit text-dark pull-right"></i></a>
+                                            <a href="delete/{{ $child->id }}"><i
+                                                    class="fa fa-close text-dark pull-right"></i></a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+                        @endforeach
+                        <h3>All Category List</h3>
                         <table class="table">
                             <thead>
                                 <tr>
@@ -60,18 +78,24 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($categoriesAll as $key => $cat)
-                                    <tr>
-                                        <th scope="row">{{ $key + 1 }}</th>
-                                        <td>{{ $cat['name'] }}</td>
-                                        <td>{{ $cat['category_id'] == null ? 'Main Category' : 'Sub Category' }}</td>
-                                        <td>{{ $cat['created_at'] }}</td>
-                                        <td><a href="delete/{{ $cat->id }}">Remove</a></td>
-
-                                    </tr>
-                                @endforeach
+                                @if ($categoriesAll)
+                                    @foreach ($categoriesAll as $key => $cat)
+                                        <tr>
+                                            <th scope="row">{{ $key + 1 }}</th>
+                                            <td>{{ $cat['name'] }}</td>
+                                            <td>{{ $cat['category_id'] == null ? 'Main Category' : 'Sub Category' }}</td>
+                                            <td>{{ $cat['created_at'] }}</td>
+                                            <td><a href="delete/{{ $cat->id }}">Remove</a></td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
+                        <div class="w-100 text-center">
+                            @if ($categoriesAll && count($categoriesAll) <= 0)
+                                <h5>No Category Available</h5>
+                            @endif
+                        </div>
                         <a href="category">
                             <a href="dashboard" class="btn btn-secondary float-end"><i
                                     class="fa fa-fw fa-lg fa-times-circle"></i>Back</a>

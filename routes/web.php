@@ -28,4 +28,6 @@ Route::group(['middleware' => ['is_admin']], function () {
     Route::get('admin/category', [CategoryController::class, 'create'])->name('category.add');
     Route::post('admin/category', [CategoryController::class, 'store'])->name('category.store');
     Route::get('admin/delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
+    Route::get('admin/getDetails/{id}', [CategoryController::class, 'getcategoryDetails'])->name('category.details');
+    Route::post('admin/getDetails/{id}', [CategoryController::class, 'edit'])->name('category.edit');
 });
